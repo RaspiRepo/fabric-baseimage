@@ -30,9 +30,10 @@ export GOROOT="/opt/go"
 # Install Golang
 # ----------------------------------------------------------------
 mkdir -p $GOPATH
-ARCH=`uname -m | sed 's|i686|386|' | sed 's|x86_64|amd64|'`
-BINTARGETS="x86_64 ppc64le s390x"
-GO_VER=1.11.5
+ARCH=`uname -m | sed 's|i686|386|' | sed 's|x86_64|amd64|' | sed 's|aarch64|arm64|'`
+BINTARGETS="x86_64 ppc64le s390x aarch64"
+GO_VER=1.12.5
+# https://dl.google.com/go/go1.12.5.linux-arm64.tar.gz
 
 # Install Golang binary if found in BINTARGETS
 if echo $BINTARGETS | grep -q `uname -m`; then
@@ -67,9 +68,10 @@ EOF
 # ----------------------------------------------------------------
 # Install NodeJS
 # ----------------------------------------------------------------
-NODE_VER=8.11.3
+NODE_VER=8.15.1
+#https://nodejs.org/dist/v8.15.1/node-v8.15.1-linux-arm64.tar.gz
 
-ARCH=`uname -m | sed 's|i686|x86|' | sed 's|x86_64|x64|'`
+# ARCH=`uname -m | sed 's|i686|x86|' | sed 's|x86_64|x64|'`
 NODE_PKG=node-v$NODE_VER-linux-$ARCH.tar.gz
 SRC_PATH=/tmp/$NODE_PKG
 
@@ -87,14 +89,18 @@ apt-get -y install python
 #
 # See https://github.com/google/protobuf
 # ----------------------------------------------------------------
-PROTOBUF_VER=3.1.0
-PROTOBUF_PKG=v$PROTOBUF_VER.tar.gz
-
+PROTOBUF_VER=3.7.1
+PROTOBUF_PKG=protoc-${PROTOBUF_VER}-linux-${ARCH}.zip
+ARCH=`uname -m | sed 's|i686|x86|' | sed 's|x86_64|x64|' | sed 's|aarch64|aarch_64|'`
 cd /tmp
-wget --quiet https://github.com/google/protobuf/archive/$PROTOBUF_PKG
-tar xpzf $PROTOBUF_PKG
-cd protobuf-$PROTOBUF_VER
-./autogen.sh
+wget --quiet https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOBUF_VER}/protoc-${PROTOBUF_VER}-linux-${ARCH}.zip
+unzip $PROTOBUF_PKG
+
+#NOTE Build from source code fails arm64 platform
+# wget --quiet https://github.com/google/protobuf/archive/$PROTOBUF_PKG
+# tar xpzf $PROTOBUF_PKG
+# cd protobuf-$PROTOBUF_VER
+# ./autogen.sh
 # NOTE: By default, the package will be installed to /usr/local. However, on many platforms, /usr/local/lib is not part of LD_LIBRARY_PATH.
 # You can add it, but it may be easier to just install to /usr instead.
 #
@@ -103,13 +109,14 @@ cd protobuf-$PROTOBUF_VER
 # ./configure --prefix=/usr
 #
 #./configure
-./configure --prefix=/usr
+# ./configure --prefix=/usr
 
-make
-make check
-make install
+# make -j 4
+# make check
+# make install
 export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 cd ~/
 
 # Make our versioning persistent
 echo $BASEIMAGE_RELEASE > /etc/hyperledger-baseimage-release
+
