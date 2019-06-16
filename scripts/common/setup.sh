@@ -89,18 +89,20 @@ apt-get -y install python
 #
 # See https://github.com/google/protobuf
 # ----------------------------------------------------------------
-PROTOBUF_VER=3.7.1
+PROTOBUF_VER=3.8.0
 PROTOBUF_PKG=protoc-${PROTOBUF_VER}-linux-${ARCH}.zip
 ARCH=`uname -m | sed 's|i686|x86|' | sed 's|x86_64|x64|' | sed 's|aarch64|aarch_64|'`
+PROTOBUF_PKG=v${PROTOBUF_VER}.tar.gz
+
 cd /tmp
-wget --quiet https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOBUF_VER}/protoc-${PROTOBUF_VER}-linux-${ARCH}.zip
-unzip $PROTOBUF_PKG
+# wget --quiet https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOBUF_VER}/protoc-${PROTOBUF_VER}-linux-${ARCH}.zip
+# unzip $PROTOBUF_PKG
 
 #NOTE Build from source code fails arm64 platform
-# wget --quiet https://github.com/google/protobuf/archive/$PROTOBUF_PKG
-# tar xpzf $PROTOBUF_PKG
-# cd protobuf-$PROTOBUF_VER
-# ./autogen.sh
+wget --quiet https://github.com/google/protobuf/archive/$PROTOBUF_PKG
+tar xpzf $PROTOBUF_PKG
+cd protobuf-$PROTOBUF_VER
+./autogen.sh
 # NOTE: By default, the package will be installed to /usr/local. However, on many platforms, /usr/local/lib is not part of LD_LIBRARY_PATH.
 # You can add it, but it may be easier to just install to /usr instead.
 #
@@ -109,14 +111,13 @@ unzip $PROTOBUF_PKG
 # ./configure --prefix=/usr
 #
 #./configure
-# ./configure --prefix=/usr
+./configure --prefix=/usr
 
-# make -j 4
+make -j 4
 # make check
-# make install
+make install
 export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 cd ~/
 
 # Make our versioning persistent
 echo $BASEIMAGE_RELEASE > /etc/hyperledger-baseimage-release
-
