@@ -32,7 +32,7 @@ export GOROOT="/opt/go"
 mkdir -p $GOPATH
 ARCH=`uname -m | sed 's|i686|386|' | sed 's|x86_64|amd64|' | sed 's|aarch64|arm64|'`
 BINTARGETS="x86_64 ppc64le s390x aarch64"
-GO_VER=1.12.5
+GO_VER=1.11.11
 # https://dl.google.com/go/go1.12.5.linux-arm64.tar.gz
 
 # Install Golang binary if found in BINTARGETS
