@@ -9,7 +9,7 @@ Therefore, the expensive FOSS components are built into this baseimage once and 
 
 # Intended Audience 
 
-This repository is only intended for ubuntu-arm64 (raspeberry pi3 etc) curating the base images. Typical developers may safely ignore this completely. Anyone wishing to customize their image is encouraged to do so via downstream means, such as a custom Dockerfile.
+This repository is only intended for ubuntu-arm64 (NVIDIA Jetson Nano, Raspberry PI3 etc) curating the base images. Typical developers may safely ignore this completely. Anyone wishing to customize their image is encouraged to do so via downstream means, such as a custom Dockerfile.
 
 ## Exceptions
 
