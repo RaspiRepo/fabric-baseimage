@@ -71,7 +71,7 @@ EOF
 NODE_VER=8.15.1
 #https://nodejs.org/dist/v8.15.1/node-v8.15.1-linux-arm64.tar.gz
 
-# ARCH=`uname -m | sed 's|i686|x86|' | sed 's|x86_64|x64|'`
+ARCH=`uname -m | sed 's|i686|x86|' | sed 's|x86_64|x64|'`
 NODE_PKG=node-v$NODE_VER-linux-$ARCH.tar.gz
 SRC_PATH=/tmp/$NODE_PKG
 
